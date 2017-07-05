@@ -1,0 +1,94 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+input, button {
+    border: 0;
+    background-color: transparent;
+}
+
+.input-combo {
+    display: flex;
+}
+
+.input-combo input {
+    flex: 1;
+}
+
+body {
+    background-color: #403F4D;
+    color: #FBFAFB;
+    font-family: sans-serif;
+}
+
+main {
+    margin: 0 auto;
+    width: 35em;
+}
+
+#tasks-progress {
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+#tasks-progress::-webkit-progress-value {
+    background-color: #62DCA5;
+}
+
+#tasks-progress::-moz-progress-bar {
+    background-color: #62DCA5;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #4E4D5C;
+}
+
+.task-add {
+    background-color: #2E2D33;
+}
+
+#tasks-progress, .task, .task-add {
+    border-radius: 3px;
+}
+
+.task, .task-add {
+    margin-bottom: 10px;
+}
+
+.task, .task-add input {
+    font-size: 1.1em;
+}
+
+.task, .task-add input, .task-add button {
+    padding: 20px;
+}
+
+.task-add button, .task-add input {
+    color: white;
+}
+
+.task-add input::placeholder {
+    color: #A9A9A9;
+}
+
+.task-date {
+    margin-top: 1em;
+    font-size: 0.7em;
+}
+
+.task-actions button {
+    background-color: white;
+    border-radius: 0.3em;
+    cursor: pointer;
+}

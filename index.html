@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Objective Master</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="scripts/moment.min.js" defer></script>
+    <script src="scripts/helpers.js" defer></script>
+    <script src="scripts/script.js" defer></script>
+</head>
+<body>
+    <main>
+        <progress id="tasks-progress" value="100" max="100"></progress>
+        <div class="input-combo task-add">
+            <input type="text" id="add-item-input" placeholder="Add new item">
+            <button id="add-item-button">
+                <img src="assets/plus.svg" width="20em" height="20em">
+            </button>
+        </div>
+        <h2>Active Tasks</h2>
+        <section id="active-tasks">
+            <div class="task">Zero</div>
+        </section>
+        <h2>Paused Tasks</h2>
+        <section id="paused-tasks">
+            <div class="task">Zero</div>
+        </section>
+        <h2>Completed Tasks</h2>
+        <section id="completed-tasks">
+            <div class="task">Zero</div>
+        </section>
+        <h2>Failed Tasks</h2>
+        <section id="failed-tasks">
+            <div class="task">Zero</div>
+        </section>
+    </main>
+</body>
+</html>
