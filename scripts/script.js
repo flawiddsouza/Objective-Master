@@ -112,7 +112,7 @@ function updateTasksProgress() {
 
 function refreshTasks() {
     if(tasks.length > 0) {
-        activeTasksSection.innerHTML = tasks.sort(dynamicSort('addedOn')).reverse().map(task => {
+        activeTasksSection.innerHTML = tasks.sort(dynamicSort('addedOn')).map(task => {
             if(!task.completed && !task.failed && !task.paused) {
                 return `
                     <div class="task">
@@ -130,7 +130,7 @@ function refreshTasks() {
             }
         }).join('')
 
-        pausedTasksSection.innerHTML = tasks.sort(dynamicSort('addedOn')).reverse().map(task => {
+        pausedTasksSection.innerHTML = tasks.sort(dynamicSort('addedOn')).map(task => {
             if(task.paused) {
                 return `
                     <div class="task">
