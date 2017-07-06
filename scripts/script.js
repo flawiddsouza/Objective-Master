@@ -68,10 +68,13 @@ tabsContextMenuDelete.addEventListener('click', e => {
         if(confirm('Do you really want to delete this?')) { 
             delete tabs[tabName]
             localStorage.setObject('Objective Master', tabs)
-            tabsSection.querySelector(`[data-tab-name="${tabName}"`).remove()
-            tasks = tabs[Object.keys(tabs)[0]] // make active tab == first tab
-            refreshTasks()
-            tabsSection.getElementsByClassName('tab')[0].classList.add('tab-active') // mark first tab as active
+            let tab = tabsSection.querySelector(`[data-tab-name="${tabName}"`)
+            if(tab.classList.contains('tab-active')) {
+                tasks = tabs[Object.keys(tabs)[0]] // make active tab == first tab
+                refreshTasks()
+                tabsSection.getElementsByClassName('tab')[0].classList.add('tab-active') // mark first tab as active
+            }
+            tab.remove()
         }
     } else {
         alert("You can't delete the last remaining tab")
