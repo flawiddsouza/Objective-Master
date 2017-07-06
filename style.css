@@ -32,8 +32,8 @@ main {
 
 #tasks-progress {
     display: block;
-    margin-top: 1em;
-    margin-bottom: 1em;
+    margin-top: 2em;
+    margin-bottom: 2em;
     width: 100%;
     -webkit-appearance: none;
     appearance: none;
@@ -90,5 +90,52 @@ main {
 .task-actions button {
     background-color: white;
     border-radius: 0.3em;
+    cursor: pointer;
+}
+
+#tabs, #tabs-main {
+    display: flex;
+}
+
+.tab {
+    color: inherit;
+    text-decoration: none;
+    margin-right: 1em;
+    cursor: pointer;
+}
+
+.tab, #add-tab {
+    background-color: #4E4D5C;
+    padding: 1em;
+    border-radius: 3px;
+}
+
+.tab-active {
+    background-color: #2E2D33;
+}
+
+#add-tab {
+    cursor: pointer;
+}
+
+#tabs-context-menu {
+    display: none;
+    position: absolute;
+    background-color: black;
+    color: white;
+}
+
+#tabs-context-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#tabs-context-menu ul li {
+    padding: 0.5em 1em;
+}
+
+#tabs-context-menu ul li:hover {
+    background-color: teal;
     cursor: pointer;
 }

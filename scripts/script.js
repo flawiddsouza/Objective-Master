@@ -1,11 +1,101 @@
-let tasks = []
+let tabs = { General: [] }
 
-if(localStorage.getArray('Objective Master') !== null) {
-    tasks = localStorage.getArray('Objective Master')
+if(localStorage.getObject('Objective Master') !== null) {
+    tabs = localStorage.getObject('Objective Master')
 }
 
+let activeTab = Object.keys(tabs)[0] // make active tab == first tab
+
+let tasks = tabs[activeTab]
+
+let tabsSection = document.getElementById('tabs-main')
+
+tabsSection.innerHTML = Object.keys(tabs).map(tabName => `<div class="tab" data-tab-name="${tabName}">${tabName}</div>`).join('')
+
+tabsSection.getElementsByClassName('tab')[0].classList.add('tab-active') // mark first tab as active
+
+tabsSection.addEventListener('click', e => {
+    if(e.target.classList.contains('tab')) {
+        let tab = e.target
+        activeTab = tab.innerHTML
+        let allTabs = Array.from(tabsSection.getElementsByClassName('tab'))
+        allTabs.forEach(element => element.classList.remove('tab-active'))
+        tab.classList.add('tab-active')
+        tasks = tabs[activeTab]
+        refreshTasks()
+    }
+})
+
+let tabsContextMenu = document.getElementById('tabs-context-menu')
+let tabsContextMenuEdit = document.getElementById('tabs-context-menu-edit')
+let tabsContextMenuDelete = document.getElementById('tabs-context-menu-delete')
+
+tabsSection.addEventListener('contextmenu', e => {
+    let target = e.target
+    if(target.classList.contains('tab')) {
+        tabsContextMenu.style.left = e.pageX + "px"
+        tabsContextMenu.style.top = e.pageY + "px"
+        tabsContextMenuEdit.dataset.tabName = target.innerHTML
+        tabsContextMenuDelete.dataset.tabName = target.innerHTML
+        tabsContextMenu.style.display = "block"
+        e.preventDefault()
+    }
+})
+
+tabsContextMenuEdit.addEventListener('click', e => {
+    let oldTabName = e.target.dataset.tabName
+    let newTabName = prompt("Enter tab name", oldTabName)
+    if(newTabName != null && newTabName != '') {
+        if(!Object.keys(tabs).some(existingTabName => existingTabName == newTabName)) {
+            tabs[newTabName] = tabs[oldTabName]
+            delete tabs[oldTabName]
+            localStorage.setObject('Objective Master', tabs)
+            let tab = tabsSection.querySelector(`[data-tab-name="${oldTabName}"`)
+            tab.innerHTML = newTabName
+            tab.dataset.tabName = newTabName
+            if(tab.classList.contains('tab-active')) {
+                tasks = tabs[newTabName]
+            }
+        } else {
+            alert("The tab name you've chosen already exists, please choose a unique one")
+        }
+    }
+})
+
+tabsContextMenuDelete.addEventListener('click', e => {
+    if(Object.keys(tabs).length > 1) {
+        let tabName = e.target.dataset.tabName
+        if(confirm('Do you really want to delete this?')) { 
+            delete tabs[tabName]
+            localStorage.setObject('Objective Master', tabs)
+            tabsSection.querySelector(`[data-tab-name="${tabName}"`).remove()
+            tasks = tabs[Object.keys(tabs)[0]] // make active tab == first tab
+            refreshTasks()
+            tabsSection.getElementsByClassName('tab')[0].classList.add('tab-active') // mark first tab as active
+        }
+    } else {
+        alert("You can't delete the last remaining tab")
+    }
+})
+
+let addTabBtn = document.getElementById('add-tab')
+
+addTabBtn.addEventListener('click', e => {
+    let tabName = prompt("Enter tab name")
+    if(tabName != null && tabName != '') {
+        if(!Object.keys(tabs).some(existingTabName => existingTabName == tabName)) {
+            tabsSection.innerHTML += `<a class="tab" data-tab-name="${tabName}">${tabName}</a>`
+            tabs[tabName] = []
+            localStorage.setObject('Objective Master', tabs)
+        } else {
+            alert("The tab name you've chosen already exists, please choose a unique one")
+        }
+    }
+})
+
 function commit() {
-    localStorage.setArray('Objective Master', tasks)
+    tabs[activeTab] = tasks
+    localStorage.setObject('Objective Master', tabs)
 }
 
 let tasksProgress = document.getElementById('tasks-progress')
@@ -167,5 +257,9 @@ window.addEventListener('click', e => {
             commit()
             refreshTasks()
         }
+    }
+
+    if(target != tabsContextMenu) {
+        tabsContextMenu.style.display = 'none'
     }
 })
