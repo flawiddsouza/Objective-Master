@@ -106,8 +106,16 @@ let completedTasksSection = document.getElementById('completed-tasks')
 let failedTasksSection = document.getElementById('failed-tasks')
 
 function updateTasksProgress() {
-    let incompleteTasks = tasks.filter(task => !task.completed && !task.failed && !task.paused)
-    tasksProgress.value =  100 / (incompleteTasks.length + 1)
+    let activeTasks = tasks.filter(task => !task.completed && !task.failed && !task.paused).length
+    let completedTasksToday = tasks.filter(task => task.completed && moment(task.endedOn).format('DMMMY') == moment().format('DMMMY')).length
+    if(activeTasks != 0 && completedTasksToday != 0) {
+        let avgIn100 = 100 / (activeTasks + completedTasksToday)
+        tasksProgress.value = completedTasksToday * avgIn100
+    } else if(activeTasks != 0 && completedTasksToday == 0) {
+        tasksProgress.value = 0
+    } else if(activeTasks == 0 && completedTasksToday !=0) {
+        tasksProgress.value = 100
+    }
 }
 
 function refreshTasks() {
