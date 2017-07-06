@@ -48,9 +48,6 @@ main {
 }
 
 .task {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     background-color: #4E4D5C;
 }
 
@@ -82,9 +79,22 @@ main {
     color: #A9A9A9;
 }
 
-.task-date {
-    margin-top: 1em;
+.task-date, .task-date-2 {
     font-size: 0.7em;
+    color: rgba(202, 201, 202, 0.4);
+}
+
+.task-date {
+    margin-bottom: 1em;
+}
+
+.task-date-2 {
+    margin-top: 1em;
+}
+
+.task-actions {
+    margin-top: 0.5em;
+    text-align: right;
 }
 
 .task-actions button {

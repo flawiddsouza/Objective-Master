@@ -117,8 +117,8 @@ function refreshTasks() {
                 return `
                     <div class="task">
                         <div class="task-main">
-                            <div class="task-description">${task.description}</div>
                             <div class="task-date">Added: ${moment(task.addedOn).format('LLL')}</div>
+                            <div class="task-description">${task.description}</div>
                         </div>
                         <div class="task-actions">
                             <button class="task-mark-failed" data-id="${task.id}">Failed</button>
@@ -135,8 +135,8 @@ function refreshTasks() {
                 return `
                     <div class="task">
                         <div class="task-main">
-                            <div class="task-description">${task.description}</div>
                             <div class="task-date">Added: ${moment(task.addedOn).format('LLL')}</div>
+                            <div class="task-description">${task.description}</div>
                         </div>
                         <div class="task-actions">
                             <button class="task-mark-active" data-id="${task.id}">Active</button>
@@ -151,9 +151,9 @@ function refreshTasks() {
                 return `
                     <div class="task">
                         <div class="task-main">
-                            <div class="task-description">${task.description}</div>
                             <div class="task-date">Added: ${moment(task.addedOn).format('LLL')}</div>
-                            <div class="task-date">Ended: ${moment(task.endedOn).format('LLL')}</div>
+                            <div class="task-description">${task.description}</div>
+                            <div class="task-date-2">Ended: ${moment(task.endedOn).format('LLL')}</div>
                         </div>
                         <div class="task-actions">
                             <button class="task-delete" data-id="${task.id}">Delete</button>
@@ -167,9 +167,9 @@ function refreshTasks() {
                 return `
                     <div class="task">
                         <div class="task-main">
-                            <div class="task-description">${task.description}</div>
                             <div class="task-date">Added: ${moment(task.addedOn).format('LLL')}</div>
-                            <div class="task-date">Ended: ${moment(task.endedOn).format('LLL')}</div>
+                            <div class="task-description">${task.description}</div>
+                            <div class="task-date-2">Ended: ${moment(task.endedOn).format('LLL')}</div>
                         </div>
                         <div class="task-actions">
                             <button class="task-delete" data-id="${task.id}">Delete</button>
