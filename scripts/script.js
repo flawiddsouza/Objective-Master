@@ -112,7 +112,7 @@ function updateTasksProgress() {
 
 function refreshTasks() {
     if(tasks.length > 0) {
-        activeTasksSection.innerHTML = tasks.reverse().map(task => {
+        activeTasksSection.innerHTML = tasks.sort(dynamicSort('addedOn')).reverse().map(task => {
             if(!task.completed && !task.failed && !task.paused) {
                 return `
                     <div class="task">
@@ -130,7 +130,7 @@ function refreshTasks() {
             }
         }).join('')
 
-        pausedTasksSection.innerHTML = tasks.reverse().map(task => {
+        pausedTasksSection.innerHTML = tasks.sort(dynamicSort('addedOn')).reverse().map(task => {
             if(task.paused) {
                 return `
                     <div class="task">
@@ -146,7 +146,7 @@ function refreshTasks() {
             }
         }).join('')
 
-        completedTasksSection.innerHTML = tasks.reverse().map(task => {
+        completedTasksSection.innerHTML = tasks.sort(dynamicSort('endedOn')).reverse().map(task => {
             if(task.completed) {
                 return `
                     <div class="task">
@@ -162,7 +162,7 @@ function refreshTasks() {
             }
         }).join('')
 
-        failedTasksSection.innerHTML = tasks.reverse().map(task => {
+        failedTasksSection.innerHTML = tasks.sort(dynamicSort('endedOn')).reverse().map(task => {
             if(task.failed) {
                 return `
                     <div class="task">
