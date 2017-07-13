@@ -10,6 +10,9 @@
     <script src="scripts/script.js" defer></script>
 </head>
 <body>
+    <button id="settings">
+        <img src="assets/settings.svg" width="20em" height="20em">
+    </button>
     <main>
         <div id="tabs">
             <div id="tabs-main"></div>
@@ -47,5 +50,20 @@
             <div class="task">Zero</div>
         </section>
     </main>
+    <div id="settingsModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <div class="modal-body">
+            <h2>Settings</h2>
+            <p>
+                <label><input type="checkbox">Hide Task Actions</label>
+            </p>
+            <p>
+                <label><input type="checkbox">Hide Start Date</label>
+            </p>
+            <p>
+                <label><input type="checkbox">Hide End Date</label>
+            </p>
+        </div>
+    </div>
 </body>
 </html>

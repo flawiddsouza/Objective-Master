@@ -4,6 +4,12 @@ if(localStorage.getObject('Objective Master') !== null) {
     tabs = localStorage.getObject('Objective Master')
 }
 
+let settings = { 0: false, 1: false, 2: false }
+
+if(localStorage.getObject('Objective Master Settings')) {
+    settings = localStorage.getObject('Objective Master Settings')
+}
+
 let activeTab = Object.keys(tabs)[0] // make active tab == first tab
 
 let tasks = tabs[activeTab]
@@ -123,15 +129,19 @@ function updateTasksProgress() {
 
 function refreshTasks() {
     if(tasks.length > 0) {
+        let settingsShowHideTaskActions = settings[0] == true ? 'style="display: none;"' : ''
+        let settingsShowHideStartDate =  settings[1] == true ? 'style="display: none;"' : ''
+        let settingsShowHideEndDate =  settings[2] == true ? 'style="display: none;"' : ''
+
         activeTasksSection.innerHTML = tasks.sort(dynamicSort('addedOn')).map(task => {
             if(!task.completed && !task.failed && !task.paused) {
                 return `
                     <div class="task">
                         <div class="task-main">
-                            <div class="task-date">Added: ${moment(task.addedOn).format('LLL')}</div>
+                            <div class="task-date" ${settingsShowHideStartDate}>Added: ${moment(task.addedOn).format('LLL')}</div>
                             <div class="task-description">${task.description}</div>
                         </div>
-                        <div class="task-actions">
+                        <div class="task-actions" ${settingsShowHideTaskActions}>
                             <button class="task-mark-failed" data-id="${task.id}">Failed</button>
                             <button class="task-mark-paused" data-id="${task.id}">Paused</button>
                             <button class="task-mark-completed" data-id="${task.id}">Completed</button>
@@ -146,10 +156,10 @@ function refreshTasks() {
                 return `
                     <div class="task">
                         <div class="task-main">
-                            <div class="task-date">Added: ${moment(task.addedOn).format('LLL')}</div>
+                            <div class="task-date" ${settingsShowHideStartDate}>Added: ${moment(task.addedOn).format('LLL')}</div>
                             <div class="task-description">${task.description}</div>
                         </div>
-                        <div class="task-actions">
+                        <div class="task-actions" ${settingsShowHideTaskActions}>
                             <button class="task-mark-active" data-id="${task.id}">Active</button>
                             <button class="task-delete" data-id="${task.id}">Delete</button>
                         </div>
@@ -162,11 +172,11 @@ function refreshTasks() {
                 return `
                     <div class="task">
                         <div class="task-main">
-                            <div class="task-date">Added: ${moment(task.addedOn).format('LLL')}</div>
+                            <div class="task-date" ${settingsShowHideStartDate}>Added: ${moment(task.addedOn).format('LLL')}</div>
                             <div class="task-description">${task.description}</div>
-                            <div class="task-date-2">Ended: ${moment(task.endedOn).format('LLL')}</div>
+                            <div class="task-date-2" ${settingsShowHideEndDate}>Ended: ${moment(task.endedOn).format('LLL')}</div>
                         </div>
-                        <div class="task-actions">
+                        <div class="task-actions" ${settingsShowHideTaskActions}>
                             <button class="task-delete" data-id="${task.id}">Delete</button>
                         </div>
                     </div>`
@@ -178,11 +188,11 @@ function refreshTasks() {
                 return `
                     <div class="task">
                         <div class="task-main">
-                            <div class="task-date">Added: ${moment(task.addedOn).format('LLL')}</div>
+                            <div class="task-date" ${settingsShowHideStartDate}>Added: ${moment(task.addedOn).format('LLL')}</div>
                             <div class="task-description">${task.description}</div>
-                            <div class="task-date-2">Ended: ${moment(task.endedOn).format('LLL')}</div>
+                            <div class="task-date-2" ${settingsShowHideEndDate}>Ended: ${moment(task.endedOn).format('LLL')}</div>
                         </div>
-                        <div class="task-actions">
+                        <div class="task-actions" ${settingsShowHideTaskActions}>
                             <button class="task-delete" data-id="${task.id}">Delete</button>
                         </div>
                     </div>`
@@ -273,4 +283,24 @@ window.addEventListener('click', e => {
     if(target != tabsContextMenu) {
         tabsContextMenu.style.display = 'none'
     }
+
+    if(target.classList.contains('modal-close')) {
+        target.parentElement.style.display = 'none'
+    }
+
+    if(target.classList.contains('modal')) {
+        target.style.display = 'none'
+    }
+})
+
+let settingsBtn = document.getElementById('settings')
+let settingsModal = document.getElementById('settingsModal')
+
+settingsBtn.addEventListener('click', e => settingsModal.style.display = 'block')
+
+bindInputElementsToLocalStorageObject('Objective Master Settings', '#settingsModal')
+
+window.addEventListener('LocalStorageUpdated', e => {
+    settings = localStorage.getObject('Objective Master Settings')
+    refreshTasks()
 })

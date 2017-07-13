@@ -37,3 +37,24 @@ function dynamicSort(property) {
         return result * sortOrder
     }
 }
+
+function bindInputElementsToLocalStorageObject(localStorageKey, rootElement) {
+    let savedObject = localStorage.getObject(localStorageKey)
+    let activeObject = {}
+    if(savedObject) {
+        activeObject = savedObject
+    }
+    let inputElements = Array.from(document.querySelector(rootElement).getElementsByTagName('input'))
+    inputElements.forEach((inputElement, index) => {
+        if(inputElement.type == 'checkbox') {
+            if(activeObject[index]) {
+                inputElement.checked = activeObject[index]
+            }
+            inputElement.addEventListener('change', e => {
+                activeObject[index] = inputElement.checked
+                localStorage.setObject(localStorageKey, activeObject)
+                window.dispatchEvent(new Event('LocalStorageUpdated'))
+            })
+        }
+    })
+}
