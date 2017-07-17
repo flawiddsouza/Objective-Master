@@ -105,6 +105,7 @@ addTabBtn.addEventListener('click', e => {
 function commit() {
     tabs[activeTab] = tasks
     localStorage.setObject('Objective Master', tabs)
+    localStorage.setItem('lastModified', new Date().getTime())
 }
 
 let tasksProgress = document.getElementById('tasks-progress')
@@ -304,3 +305,120 @@ window.addEventListener('LocalStorageUpdated', e => {
     settings = localStorage.getObject('Objective Master Settings')
     refreshTasks()
 })
+
+if(localStorage.getItem('lastModified') == null) {
+    localStorage.setItem('lastModified', 0)
+}
+
+let connectionAttempts = 1
+
+function testSocket(server, callback) {
+    try {
+        let socket = new WebSocket('ws://' + server)
+        socket.onopen = e => {
+            socket.close()
+            callback(true) // "Can connect to server"
+        }
+        socket.onerror = e => {
+            callback(false) // "Can't connect to server"
+        }
+    } catch(e) {
+        callback(false)
+    }
+}
+
+function startSync(server, username, appName, callback) {
+    let socket = new WebSocket('ws://' + server)
+
+    let syncTimer
+
+    socket.addEventListener('open', e => {
+        callback('connected')
+        connectionAttempts = 1
+        syncTimer = setInterval(() => {
+            socket.send(JSON.stringify({
+                'type': 'status_check',
+                'username': username,
+                'app_name': appName,
+                'last_modified': localStorage.getItem('lastModified')
+            }))
+        }, 5000)
+    })
+
+    socket.addEventListener('message', e => {
+        switch(e.data) {
+            case 'last_modified unchanged':
+                // console.log('data in sync')
+                break
+            case 'last_modified changed':
+                // console.log('data needs sync')
+                localStorage.setItem('lastModified', new Date().getTime())
+                socket.send(JSON.stringify({
+                    'type': 'sync',
+                    'username': username,
+                    'app_name': appName,
+                    'json': localStorage.getItem('Objective Master'),
+                    'last_modified': localStorage.getItem('lastModified')
+                }))
+                break
+        }
+    })
+
+    socket.addEventListener('close', e => {
+        callback('disconnected')
+        clearInterval(syncTimer)
+
+        let timeoutInterval = generateInterval(connectionAttempts)
+        setTimeout(() => {
+            connectionAttempts++
+            startSync(server, username, appName, callback)
+        }, timeoutInterval)
+    })
+}
+
+let settingsTestConnectionBtn = document.getElementById('settings-test-connection')
+let settingsConnectionResult = document.getElementById('settings-connection-result')
+let settingsSyncServerUsername = document.getElementById('settings-sync-server-username')
+let settingsStartSyncBtn = document.getElementById('settings-start-sync')
+let settingsConnectionStatus = document.getElementById('settings-connection-status')
+
+settingsTestConnectionBtn.addEventListener('click', e => {
+    settingsTestConnectionBtn.disabled = true
+    let serverAddress = settings[3]
+    testSocket(serverAddress, success => {
+        if(success) {
+            settingsConnectionResult.innerHTML = 'Server Exists'
+            settingsSyncServerUsername.disabled = false
+            settingsStartSyncBtn.disabled = false
+        } else {
+            settingsConnectionResult.innerHTML = "Can't Connect to Given Server"
+            settingsSyncServerUsername.disabled = true
+            settingsStartSyncBtn.disabled = true
+        }
+        settingsTestConnectionBtn.disabled = false
+    })
+})
+
+settingsStartSyncBtn.addEventListener('click', e => {
+    settingsStartSyncBtn.disabled = true
+    let serverAddress = settings[3]
+    let serverUsername = settings[4]
+    startSync(serverAddress, serverUsername, "Objective Master", syncState)
+})
+
+let serverAddress = settings[3]
+let serverUsername = settings[4]
+
+if(serverAddress && serverUsername) {
+    startSync(serverAddress, serverUsername, "Objective Master", syncState)
+}
+
+function syncState(state) {
+    switch(state) {
+        case 'disconnected':
+            settingsConnectionStatus.innerHTML = 'Disconnected'
+            break;
+        case 'connected':
+            settingsConnectionStatus.innerHTML = 'Connected'
+    }
+}

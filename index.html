@@ -63,6 +63,26 @@
             <p>
                 <label><input type="checkbox">Hide End Date</label>
             </p>
+            <p>
+                <label>
+                    Sync Server Address<br>
+                    <input type="text">
+                </label>
+            </p>
+            <p>
+                <button id="settings-test-connection">Test Connection</button>
+            </p>
+            <p class="status-line">Connection Test: <span id="settings-connection-result">Untested</span></p>
+            <p>
+                <label>
+                    Sync Server Username<br>
+                    <input type="text" id="settings-sync-server-username" disabled>
+                </label>
+            </p>
+            <p>
+                <button id="settings-start-sync" disabled>Start Sync</button>
+            </p>
+            <p class="status-line">Connection Status: <span id="settings-connection-status">Not Connected</span></p>
         </div>
     </div>
 </body>

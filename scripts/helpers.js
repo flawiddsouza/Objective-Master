@@ -55,6 +55,20 @@ function bindInputElementsToLocalStorageObject(localStorageKey, rootElement) {
                 localStorage.setObject(localStorageKey, activeObject)
                 window.dispatchEvent(new Event('LocalStorageUpdated'))
             })
+        } else if(inputElement.type == 'text') {
+            if(activeObject[index]) {
+                inputElement.value = activeObject[index]
+            }
+            inputElement.addEventListener('input', e => {
+                activeObject[index] = inputElement.value
+                localStorage.setObject(localStorageKey, activeObject)
+                window.dispatchEvent(new Event('LocalStorageUpdated'))
+            })
         }
     })
+}
+
+// From: https://gist.github.com/strife25/9310539#gistcomment-1402329
+function generateInterval(attempts) {
+    return Math.min(30, (Math.pow(2, attempts) - 1)) * 1000
 }

@@ -198,6 +198,33 @@ main {
     margin-right: 0.5em;
 }
 
-#settingsModal label:hover {
+#settingsModal label:hover, #settingsModal button:hover {
     cursor: pointer;
+}
+
+#settingsModal input[type=text] {
+    background-color: #2E2D33;
+    width: 100%;
+}
+
+#settingsModal input[type=text]::placeholder {
+    color: #A9A9A9;
+}
+
+#settingsModal button {
+    background-color: grey;
+}
+
+#settingsModal input[type=text], #settingsModal button {
+    border-radius: 3px;
+    padding: 0.5em;
+    color: white;
+}
+
+#settingsModal input[type=text]:disabled, #settingsModal button:disabled {
+    opacity: 0.3;
+}
+
+#settingsModal .status-line {
+    color: lightgreen;
 }
