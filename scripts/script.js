@@ -339,27 +339,41 @@ function startSync(server, username, appName, callback) {
             socket.send(JSON.stringify({
                 'type': 'status_check',
                 'username': username,
-                'app_name': appName,
-                'last_modified': localStorage.getItem('lastModified')
+                'appName': appName,
+                'lastModified': localStorage.getItem('lastModified')
             }))
         }, 5000)
     })
 
     socket.addEventListener('message', e => {
-        switch(e.data) {
-            case 'last_modified unchanged':
+        let receivedMessage = JSON.parse(e.data)
+        switch(receivedMessage['message']) {
+            case 'data in sync':
                 // console.log('data in sync')
                 break
-            case 'last_modified changed':
+            case 'server data needs sync':
                 // console.log('data needs sync')
                 localStorage.setItem('lastModified', new Date().getTime())
                 socket.send(JSON.stringify({
-                    'type': 'sync',
+                    'type': 'server_sync',
                     'username': username,
-                    'app_name': appName,
+                    'appName': appName,
                     'json': localStorage.getItem('Objective Master'),
-                    'last_modified': localStorage.getItem('lastModified')
+                    'lastModified': localStorage.getItem('lastModified')
                 }))
+                break
+            case 'client data needs sync':
+                socket.send(JSON.stringify({
+                    'type': 'client_sync',
+                    'username': username,
+                    'appName': appName,
+                }))
+                break
+            case 'client sync': // TODO Implement
+                console.log("Start Client Sync")
+                console.log(receivedMessage['json'])
+                localStorage.setItem('lastModified', new Date().getTime())
+                console.log("End Client Sync")
                 break
         }
     })
