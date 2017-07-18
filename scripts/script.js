@@ -314,7 +314,7 @@ let connectionAttempts = 1
 
 function testSocket(server, callback) {
     try {
-        let socket = new WebSocket('ws://' + server)
+        let socket = new WebSocket(server)
         socket.onopen = e => {
             socket.close()
             callback(true) // "Can connect to server"
@@ -328,7 +328,7 @@ function testSocket(server, callback) {
 }
 
 function startSync(server, username, appName, callback) {
-    let socket = new WebSocket('ws://' + server)
+    let socket = new WebSocket(server)
 
     let syncTimer
 
