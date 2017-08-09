@@ -369,11 +369,12 @@ function startSync(server, username, appName, callback) {
                     'appName': appName,
                 }))
                 break
-            case 'client sync': // TODO Implement
+            case 'client sync':
                 console.log("Start Client Sync")
-                console.log(receivedMessage['json'])
+                localStorage.setObject('Objective Master', JSON.parse(receivedMessage['json']))
                 localStorage.setItem('lastModified', new Date().getTime())
                 console.log("End Client Sync")
+                location.reload() // since we have no way to refresh tabs as of yet
                 break
         }
     })
